@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="uz"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Mobile Plus – optom aksessuar</title>
+<style>
+:root{--bg:#f6f6f4;--card:#fff;--ink:#15171a;--mut:#6b7078;--line:#e4e4e0;--red:#e3262e;--ok:#14803c;--bad:#c62828;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#121315;--card:#1c1e21;--ink:#f1f1ee;--mut:#9a9fa6;--line:#2c2f33;--ok:#4cc27a;--bad:#ff7b7b}}
+:root[data-theme="dark"]{--bg:#121315;--card:#1c1e21;--ink:#f1f1ee;--mut:#9a9fa6;--line:#2c2f33;--ok:#4cc27a;--bad:#ff7b7b}
+*{box-sizing:border-box}html{color-scheme:light dark}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.45 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;min-height:100vh}
+#app{max-width:720px;margin:0 auto;padding:14px 14px 96px}
+h1{font-size:22px;margin:0}h2{font-size:17px;margin:18px 0 8px}
+.top{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:12px}
+.logo{display:flex;align-items:center;gap:10px;font-weight:800;font-size:19px}
+.logo i{background:var(--red);color:#fff;font-style:normal;border-radius:8px;padding:2px 8px}
+button,input,select{font:inherit;color:inherit}
+input,select{width:100%;padding:11px 12px;border:1px solid var(--line);border-radius:10px;background:var(--card);margin:4px 0 10px}
+button{border:0;border-radius:10px;padding:11px 14px;background:var(--red);color:#fff;font-weight:600;cursor:pointer}
+button.g{background:transparent;color:var(--ink);border:1px solid var(--line)}
+button.s{padding:6px 10px;font-size:13px}
+button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid var(--red);outline-offset:2px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px}
+.login{margin-top:8vh}
+.seg{display:flex;gap:6px;margin:14px 0}.seg button{flex:1}
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+@media(min-width:560px){.grid{grid-template-columns:repeat(3,1fr)}}
+.p{background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:hidden;display:flex;flex-direction:column}
+.ph{aspect-ratio:1;background:var(--line);display:grid;place-items:center;font-size:44px}
+.ph img{width:100%;height:100%;object-fit:cover}
+.pb{padding:10px;display:flex;flex-direction:column;gap:4px;flex:1}
+.pn{font-weight:600;font-size:14px}.pr{font-weight:800;color:var(--red)}
+.mut{color:var(--mut);font-size:13px}
+.bar{position:fixed;left:0;right:0;bottom:0;padding:10px 14px calc(10px + env(safe-area-inset-bottom,0px));background:var(--card);border-top:1px solid var(--line)}
+.bar>div{max-width:720px;margin:auto;display:flex;gap:8px}.bar button{flex:1}
+.tabs{display:flex;gap:6px;overflow-x:auto;margin-bottom:12px}.tabs button{white-space:nowrap}
+.tabs button:not(.on){background:transparent;color:var(--ink);border:1px solid var(--line)}
+.row{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--line)}
+.row:last-child{border:0}.row .ph{width:48px;height:48px;font-size:22px;border-radius:8px;flex:none;overflow:hidden}.row>div:nth-child(2){flex:1;min-width:0}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.stat b{display:block;font-size:20px}
+.pos{color:var(--ok)}.neg{color:var(--bad)}
+.tag{display:inline-block;padding:2px 8px;border-radius:99px;border:1px solid var(--line);font-size:12px}
+.scroll{overflow-x:auto}
+</style></head><body><div id="app"></div>
+<script>
+var KEY="mobileplus_v1",ADMIN_PASS="admin123",S,U=null,cart={},tab="mah",q="",showCart=false,img="";
+function so(n){return Math.round(n).toLocaleString("ru-RU").replace(/\u00a0/g," ")+" so’m"}
+function load(){try{S=JSON.parse(localStorage.getItem(KEY))}catch(e){S=null}
+ if(!S)S={products:[
+ {id:1,name:"Notebook zaryadka Dell 90W",price:180000,cost:140000,stock:40,img:"",e:"🔌"},
+ {id:2,name:"Braslet Whoop GR5515 ONE",price:125000,cost:95000,stock:25,img:"",e:"⌚"},
+ {id:3,name:"Naushnik simsiz",price:90000,cost:62000,stock:60,img:"",e:"🎧"},
+ {id:4,name:"Telefon chexol (optom 10 dona)",price:150000,cost:100000,stock:30,img:"",e:"📱"}],orders:[],exp:[],n:10}}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
+function $(id){return document.getElementById(id)}
+function esc(s){return String(s).replace(/[&<>"]/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]})}
+function thumb(p){return '<div class="ph">'+(p.img?'<img alt="" src="'+p.img+'">':p.e||"📦")+'</div>'}
+function render(){load2();var a=$("app");
+ if(!U){a.innerHTML=loginView();return}
+ a.innerHTML=U.role==="admin"?adminView():shopView()}
+function load2(){if(!S)load()}
+function loginView(){return '<div class="login"><div class="logo"><i>M+</i> Mobile Plus</div><h1 style="margin-top:16px">Optom aksessuar</h1><p class="mut">Kirish turini tanlang.</p>'+
+'<div class="seg"><button id="bc">Mijoz</button><button class="g" id="ba">Admin</button></div><div class="card" id="lf"></div></div>'}
+function loginForm(role){$("bc").className=role==="c"?"":"g";$("ba").className=role==="a"?"":"g";
+ $("lf").innerHTML=role==="c"?'<label>Ismingiz<input id="ln" autocomplete="name"></label><label>Telefon<input id="lp" type="tel" placeholder="+998 90 123 45 67"></label><button id="go" style="width:100%">Do‘konga kirish</button>':
+ '<label>Admin paroli<input id="lw" type="password"></label><p class="mut">Demo parol: admin123</p><button id="go" style="width:100%">Admin sifatida kirish</button>';
+ $("go").onclick=function(){if(role==="c"){var n=$("ln").value.trim(),p=$("lp").value.trim();if(!n||!p){alert("Ism va telefonni kiriting");return}U={role:"client",name:n,phone:p}}
+ else{if($("lw").value!==ADMIN_PASS){alert("Parol noto‘g‘ri");return}U={role:"admin",name:"Admin"}}render()}}
+function shopView(){var l=S.products.filter(function(p){return p.name.toLowerCase().indexOf(q.toLowerCase())>-1});
+ var cnt=0,tot=0;for(var id in cart){var p=find(+id);if(p){cnt+=cart[id];tot+=cart[id]*p.price}}
+ var h='<div class="top"><div class="logo"><i>M+</i> Mobile Plus</div><button class="g s" id="out">Chiqish</button></div><input id="sq" placeholder="Mahsulot qidirish" value="'+esc(q)+'"><div class="grid">';
+ l.forEach(function(p){h+='<div class="p">'+thumb(p)+'<div class="pb"><div class="pn">'+esc(p.name)+'</div><div class="pr">'+so(p.price)+'</div><div class="mut">Omborda: '+p.stock+'</div><button class="s add" data-id="'+p.id+'"'+(p.stock<1?" disabled":"")+'>+ Savatga</button></div></div>'});
+ if(!l.length)h+='<p class="mut">Hech narsa topilmadi. Boshqa so‘z bilan qidiring.</p>';
+ h+='</div>';
+ if(cnt)h+='<div class="bar"><div><button id="oc">Savat: '+cnt+' ta · '+so(tot)+'</button></div></div>';
+ if(showCart)h+=cartView(tot);return h}
+function find(id){return S.products.filter(function(p){return p.id===id})[0]}
+function cartView(tot){var h='<div style="position:fixed;inset:0;background:rgba(0,0,0,.5);display:flex;align-items:flex-end;z-index:5"><div class="card" style="width:100%;max-width:720px;margin:auto;max-height:85vh;overflow:auto;border-radius:18px 18px 0 0"><div class="top"><h1>Buyurtma</h1><button class="g s" id="cc">Yopish</button></div>';
+ for(var id in cart){var p=find(+id);if(!p)continue;h+='<div class="row">'+thumb(p)+'<div><div class="pn">'+esc(p.name)+'</div><div class="mut">'+so(p.price)+'</div></div><button class="g s mn" data-id="'+id+'">−</button><b>'+cart[id]+'</b><button class="g s pl" data-id="'+id+'">+</button></div>'}
+ return h+'<h2>Jami: '+so(tot)+'</h2><button id="sendo" style="width:100%">Buyurtma berish</button></div></div>'}
+function stats(){var rev=0,cost=0,exp=0,n=0;S.orders.forEach(function(o){if(o.status==="Yetkazildi"){n++;rev+=o.total;o.items.forEach(function(i){cost+=i.cost*i.qty})}});
+ S.exp.forEach(function(e){exp+=e.sum});return{rev:rev,cost:cost,exp:exp,gross:rev-cost,net:rev-cost-exp,n:n}}
+function adminView(){var h='<div class="top"><div class="logo"><i>M+</i> Admin</div><button class="g s" id="out">Chiqish</button></div><div class="tabs">';
+ [["mah","Mahsulotlar"],["buy","Buyurtmalar"],["stat","Foyda / zarar"]].forEach(function(t){h+='<button class="'+(tab===t[0]?"on":"")+' tb" data-t="'+t[0]+'">'+t[1]+'</button>'});
+ h+='</div>';
+ if(tab==="mah"){h+='<div class="card"><b>Yangi mahsulot</b><input id="an" placeholder="Nomi"><div class="two"><input id="ap" type="number" placeholder="Sotuv narxi"><input id="ac" type="number" placeholder="Tannarx (olish narxi)"></div><div class="two"><input id="as" type="number" placeholder="Soni (ombor)"><input id="af" type="file" accept="image/*"></div><button id="addp" style="width:100%">Mahsulot qo‘shish</button></div><h2>Ro‘yxat ('+S.products.length+')</h2><div class="card">';
+  S.products.forEach(function(p){var m=p.price-p.cost;h+='<div class="row">'+thumb(p)+'<div><div class="pn">'+esc(p.name)+'</div><div class="mut">'+so(p.price)+' · ombor '+p.stock+' · foyda/dona <span class="'+(m>=0?"pos":"neg")+'">'+so(m)+'</span></div></div><button class="g s ed" data-id="'+p.id+'">Narx</button><button class="g s dl" data-id="'+p.id+'">×</button></div>'});h+='</div>'}
+ if(tab==="buy"){h+='<div class="card">';if(!S.orders.length)h+='<p class="mut">Hozircha buyurtma yo‘q. Mijoz buyurtma bergach shu yerda ko‘rinadi.</p>';
+  S.orders.slice().reverse().forEach(function(o){h+='<div class="row" style="align-items:flex-start"><div><div class="pn">#'+o.id+' · '+esc(o.name)+' · '+esc(o.phone)+'</div><div class="mut">'+o.date+'<br>'+o.items.map(function(i){return esc(i.name)+" ×"+i.qty}).join(", ")+'</div><b>'+so(o.total)+'</b></div><select class="st" data-id="'+o.id+'" style="width:auto;margin:0">'+["Yangi","Yig‘ilmoqda","Yetkazildi","Bekor"].map(function(x){return '<option'+(x===o.status?" selected":"")+'>'+x+'</option>'}).join("")+'</select></div>'});h+='</div>'}
+ if(tab==="stat"){var s=stats();h+='<div class="two"><div class="card stat"><span class="mut">Sotuv (yetkazilgan)</span><b>'+so(s.rev)+'</b></div><div class="card stat"><span class="mut">Tannarx</span><b>'+so(s.cost)+'</b></div><div class="card stat"><span class="mut">Yalpi foyda</span><b class="'+(s.gross>=0?"pos":"neg")+'">'+so(s.gross)+'</b></div><div class="card stat"><span class="mut">Xarajatlar</span><b>'+so(s.exp)+'</b></div></div><div class="card stat" style="margin-top:10px"><span class="mut">Sof natija</span><b class="'+(s.net>=0?"pos":"neg")+'" style="font-size:26px">'+(s.net>=0?"Foyda: ":"Zarar: ")+so(Math.abs(s.net))+'</b><span class="mut">'+s.n+' ta buyurtma hisoblandi</span></div><h2>Xarajat qo‘shish</h2><div class="card"><input id="en" placeholder="Nomi (ijara, yo‘lkira...)"><input id="es" type="number" placeholder="Summa"><button id="adde" style="width:100%">Xarajatni saqlash</button>'+S.exp.map(function(e,i){return '<div class="row"><div class="pn" style="flex:1">'+esc(e.name)+'</div><span>'+so(e.sum)+'</span><button class="g s de" data-i="'+i+'">×</button></div>'}).join("")+'</div>'}
+ return h}
+function on(sel,ev,fn){var els=document.querySelectorAll(sel);for(var i=0;i<els.length;i++)els[i].addEventListener(ev,fn)}
+document.addEventListener("click",function(e){var t=e.target.closest("button");if(!t)return;var id=t.id,d=+t.dataset.id;
+ if(id==="bc")loginForm("c");else if(id==="ba")loginForm("a");
+ else if(id==="out"){U=null;cart={};showCart=false;render();loginForm("c")}
+ else if(t.classList.contains("add")){cart[d]=(cart[d]||0)+1;var p=find(d);if(cart[d]>p.stock)cart[d]=p.stock;render()}
+ else if(id==="oc"){showCart=true;render()}else if(id==="cc"){showCart=false;render()}
+ else if(t.classList.contains("pl")){var p2=find(d);if(cart[d]<p2.stock)cart[d]++;render()}
+ else if(t.classList.contains("mn")){cart[d]--;if(cart[d]<1)delete cart[d];if(!Object.keys(cart).length)showCart=false;render()}
+ else if(id==="sendo"){var items=[],tot=0;for(var k in cart){var p3=find(+k);items.push({name:p3.name,price:p3.price,cost:p3.cost,qty:cart[k]});tot+=p3.price*cart[k];p3.stock-=cart[k]}
+  var o={id:S.n++,date:new Date().toLocaleString("ru-RU"),name:U.name,phone:U.phone,items:items,total:tot,status:"Yangi"};S.orders.push(o);save();
+  try{if(window.Telegram&&Telegram.WebApp)Telegram.WebApp.sendData(JSON.stringify(o))}catch(x){}
+  cart={};showCart=false;render();alert("Buyurtma #"+o.id+" qabul qilindi. Tez orada siz bilan bog‘lanamiz.")}
+ else if(t.classList.contains("tb")){tab=t.dataset.t;render()}
+ else if(id==="addp"){var n=$("an").value.trim(),pr=+$("ap").value,c=+$("ac").value,st=+$("as").value;if(!n||!pr){alert("Nom va sotuv narxini kiriting");return}
+  S.products.push({id:S.n++,name:n,price:pr,cost:c||0,stock:st||0,img:img,e:"📦"});img="";save();render()}
+ else if(t.classList.contains("dl")){if(confirm("O‘chirilsinmi?")){S.products=S.products.filter(function(p){return p.id!==d});save();render()}}
+ else if(t.classList.contains("ed")){var p4=find(d),np=prompt("Yangi sotuv narxi:",p4.price);if(np){p4.price=+np||p4.price;var nc=prompt("Yangi tannarx:",p4.cost);if(nc!==null)p4.cost=+nc||0;var ns=prompt("Ombordagi soni:",p4.stock);if(ns!==null)p4.stock=+ns||0;save();render()}}
+ else if(id==="adde"){var en=$("en").value.trim(),es=+$("es").value;if(!en||!es){alert("Nom va summani kiriting");return}S.exp.push({name:en,sum:es});save();render()}
+ else if(t.classList.contains("de")){S.exp.splice(+t.dataset.i,1);save();render()}});
+document.addEventListener("change",function(e){var t=e.target;
+ if(t.classList.contains("st")){S.orders.forEach(function(o){if(o.id===+t.dataset.id)o.status=t.value});save()}
+ if(t.id==="af"&&t.files[0]){var r=new FileReader();r.onload=function(){var im=new Image();im.onload=function(){var c=document.createElement("canvas"),k=Math.min(1,480/Math.max(im.width,im.height));c.width=im.width*k;c.height=im.height*k;c.getContext("2d").drawImage(im,0,0,c.width,c.height);img=c.toDataURL("image/jpeg",.72)};im.src=r.result};r.readAsDataURL(t.files[0])}});
+document.addEventListener("input",function(e){if(e.target.id==="sq"){q=e.target.value;var p=e.target.selectionStart;render();var s=$("sq");s.focus();s.setSelectionRange(p,p)}});
+load();render();if(!U)loginForm("c");
+</script></body></html>
